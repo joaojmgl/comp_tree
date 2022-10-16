@@ -20,6 +20,9 @@ Considere uma arvore binaria cujos os nos admitem comparação.
     <p aling="center"> <img scr=img/redblack.gif/></p>
 - O balenciamento da arvore avl se da por meio de rotações.
     - Rotação simples para direita:
+    <p align="center">
+  <img  src="img/direita.gif" /><br/>
+  </p>
         <p aling="center"> <img scr=img/direita.gif/></p>
     - Rotação simples para esquerda: 
         <p aling="center"> <img scr=img/esquerda.gif/></p>
