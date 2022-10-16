@@ -6,6 +6,7 @@
 #include<stdbool.h>
 #include<fstream>
 #include<iostream>
+#include<vector>
 using namespace std;
 
 typedef struct Record Record;
@@ -33,7 +34,10 @@ void insertFixUp(Tree **raiz, Tree *child);//ok
 void insertTree_rb(Tree **t, Tree **pai, Tree **raiz, Record r);//ok
 void remove_search_rb(Tree **raiz, Tree **sucessor, Record r);
 void antecessor_rb(Tree **raiz, Tree **aux);
-void remove_rb(Tree **rb, Record r);
+void remove_rb(Tree **rb, Tree *r, Record t);
+void Transplante_rb(Tree **rb, Tree *r, Tree *prox);
+Tree *TreeMinimun(Tree **aux);
+void delete_fixup(Tree **rb, Tree *v);
 // AVL:
 void insertTree_avl(Tree **t, Record r);//ok
 void remove_search_avl(Tree **t, Tree **f, Record r);//ok

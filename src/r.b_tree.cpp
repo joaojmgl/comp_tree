@@ -1,4 +1,5 @@
 #include "all_trees.hpp"
+ofstream arq_rb("Remoção Red Black");
 
 
 void insertFixUp(Tree **raiz, Tree *child){
@@ -158,12 +159,15 @@ void rotacaoSimplesDireita_rb(Tree **raiz, Tree *child){
   
 // }
 
-void remove_rb(Tree **rb, Tree *r){
+void remove_rb(Tree **rb, Tree *r, Record t){
 Tree *aux = r;
 Tree *aux1;
+// cout<<"merda"<<endl;
+arq_rb<<"O numero """<<t.key<<""" foi removido.\n";
 bool original_color=aux->cor;
 if(aux->left==nullptr){
-  aux1 = r->right;//x = aux1 y=aux valor=r
+  // arq_rb<<"O numero """<<t.key<<""" foi removido.\n"; 
+  aux1 = r->right;
 
   if (aux1==nullptr)
   {
@@ -175,6 +179,7 @@ if(aux->left==nullptr){
   Transplante_rb(rb,r,r->right);
   aux1->pai = r->pai;
 } else if(r->right == nullptr){
+  // arq_rb<<"O numero """<<t.key<<""" foi removido.\n"; 
   aux1 = r->left;
   if(aux1 == nullptr){
     aux1 = new Tree;
@@ -191,7 +196,7 @@ if(aux->left==nullptr){
     if (aux1==nullptr){
       aux1=new Tree;
       aux1->pai=aux;
-      aux1->item.key=404;
+      aux1->reg.key=404;
       aux1->cor=true;
       aux->left=aux1;
     }
@@ -208,17 +213,130 @@ if(aux->left==nullptr){
     aux->right->pai=aux;
     aux->cor=r->cor;
   }
-  Tree *aux=aux1;
+  Tree *sec=aux1;
   if (original_color)
-    RBDeleteFixup(rb,aux1);
-  if (aux->item.key==404){
-    if (aux==aux->pai->left)
-      aux->pai->left=nullptr;
+    delete_fixup(rb,aux1);
+  if (sec->reg.key==404){
+    if (sec==sec->pai->left)
+      sec->pai->left=nullptr;
     else
-      aux->pai->right=nullptr;
-    delete aux;
+      sec->pai->right=nullptr;
+    delete sec;
   }
   delete r;
 }
 
 
+void Transplante_rb(Tree **rb, Tree *r, Tree *prox){
+  if (r->pai==nullptr)
+    (*rb)=prox;
+  else if(r==r->pai->left)
+    r->pai->left=prox;
+  else
+    r->pai->right=prox;
+  prox->pai=r->pai;
+}
+
+void remove_search_rb(Tree **rb,Tree **aux, Record r){
+  if (*aux == nullptr){ 
+    arq_rb<<"Numero não encontrado: "<<r.key<<"\n";
+    return;
+  }
+    
+  if (r.key < (*aux)->reg.key){ 
+    remove_search_rb(rb, &(*aux)->left, r);
+    return; 
+  }
+  if (r.key > (*aux)->reg.key){ 
+    remove_search_rb(rb, &(*aux)->right, r); 
+    return; 
+  }
+
+  if ((*rb)->right==nullptr && (*rb)->left==nullptr){
+    delete (*rb);
+    (*rb)=nullptr;
+    return;
+  } 
+  remove_rb(rb,(*aux),r);
+  
+} 
+
+
+Tree *TreeMinimun(Tree **aux){
+  if ((*aux)->right != nullptr){
+    return TreeMinimun(&(*aux)->right);
+  }
+  else{
+    return (*aux);
+  }
+  return nullptr;
+} 
+
+
+
+void delete_fixup(Tree **rb, Tree *v){
+  while (v!=(*rb)&&v->cor){
+    if (v==v->pai->left){
+      Tree* aux=v->pai->right;
+      if (aux!=nullptr){
+        if (!aux->cor){
+          aux->cor=true;
+          v->pai->cor=false;
+          rotacaoSimplesEsquerda_rb(rb,v->pai);
+          aux=v->pai->right;
+        }
+        if ((aux->right==nullptr||aux->right->cor)&&(aux->left==nullptr||aux->left->cor)){
+          aux->cor=false;
+          v=v->pai;
+        }
+        else if(aux->right==nullptr||aux->right->cor){
+          aux->left->cor=true;
+          aux->cor=false;
+          rotacaoSimplesDireita_rb(rb,aux);
+          aux=v->pai->right;
+        }
+        if(aux->right!=nullptr&&!aux->right->cor){
+          aux->cor=v->pai->cor;
+          v->pai->cor=true;
+          aux->right->cor=true;
+          rotacaoSimplesEsquerda_rb(rb,v->pai);
+          v=(*rb);
+        }
+      }
+      else
+        v=v->pai;
+    }
+    else{
+      Tree* aux=v->pai->left;
+      if (aux!=nullptr){
+        if (!aux->cor){
+          aux->cor=true;
+          v->pai->cor=false;
+          rotacaoSimplesDireita_rb(rb,v->pai);
+          aux=v->pai->left;
+        }
+        if ((aux->right==nullptr||aux->right->cor)&&(aux->left==nullptr||aux->left->cor)){
+          if(aux)
+            aux->cor=false;
+          v=v->pai;
+        }
+        else if(aux->left==nullptr||aux->left->cor){
+          aux->right->cor=true;
+          aux->cor=false;
+          rotacaoSimplesEsquerda_rb(rb,aux);
+          aux=v->pai->left;
+        }
+        if(aux->left!=nullptr&&!aux->left->cor){
+          aux->cor=v->pai->cor;
+          v->pai->cor=true;
+          aux->left->cor=true;
+          rotacaoSimplesDireita_rb(rb,v->pai);
+          v=(*rb);
+        }
+      }
+      else
+        v=v->pai;
+    }
+  }
+  v->cor=true;  
+}

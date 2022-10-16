@@ -1,5 +1,5 @@
 #include "all_trees.hpp"
-
+ofstream arq("Remoção AVL");
 
 
 
@@ -89,15 +89,23 @@ void rebalanceTree(Tree **t){
 
 void remove_search_avl(Tree **t, Tree **f ,Record r){
 	Tree *aux1;
-	// cout<<"entrei"<<endl;
 	if (*t == NULL){ 
-  		// printf("[ERROR]: Record not found!!!\n");
+  		arq<<"Numero não encontrado: "<<r.key<<"\n";
     	return;
 	}	
-  	  	if (r.key < (*t)->reg.key){ remove_search_avl(&(*t)->left, t, r); return;}
-  	if (r.key > (*t)->reg.key){ remove_search_avl(&(*t)->right, t, r); return;}
+  	if (r.key < (*t)->reg.key){ 
+		remove_search_avl(&(*t)->left, t, r);
+		// arq<<"O numero """<<r.key<<""" foi removido."; 
+		return;
+		}
+  	if (r.key > (*t)->reg.key){ 
+		remove_search_avl(&(*t)->right, t, r);
+		// arq<<"O numero """<<r.key<<""" foi removido."; 
+		return;
+	}
 
   	if ((*t)->right == NULL){ 
+		arq<<"O numero """<<r.key<<""" foi removido.\n"; 
   		aux1 = *t;  
   		*t = (*t)->left;
     	free(aux1);
@@ -106,6 +114,7 @@ void remove_search_avl(Tree **t, Tree **f ,Record r){
   	}
 
   	if ((*t)->left != NULL){ 
+		arq<<"O numero """<<r.key<<""" foi removido.\n"; 
   		antecessor(&(*t)->left, *t);
   		rebalanceTree(t);
   		rebalanceTree(f);

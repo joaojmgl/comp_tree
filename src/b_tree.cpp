@@ -1,6 +1,6 @@
 #include "all_trees.hpp"
 #include "fila.hpp"
-
+ofstream arq_b("Remoção binario");
 
 bool TVazia(Tree **t){
   return *t == NULL;
@@ -18,6 +18,7 @@ void insertTree_binari(Tree **t, Record r){
     
     if(r.key < (*t)->reg.key){
       insertTree_binari(&(*t)->left, r);
+      
     }
     
     if(r.key > (*t)->reg.key){
@@ -30,23 +31,35 @@ void insertTree_binari(Tree **t, Record r){
  
 void remove_search_binari(Tree **t, Record r){
 	Tree *aux;
-  	
   	if (*t == NULL){ 
-  		// printf("[ERROR]: Record not found!!!\n");
+  		arq_b<<"Numero não encontrado: "<<r.key<<endl;
     	return;
   	}
 
-  	if (r.key < (*t)->reg.key){ remove_search_binari(&(*t)->left, r); return; }
-  	if (r.key > (*t)->reg.key){ remove_search_binari(&(*t)->right, r); return; }
+  	if (r.key < (*t)->reg.key){ 
+      remove_search_binari(&(*t)->left, r); 
+      // arq_b<<"O numero """<<r.key<<""" foi removido.\n"; 
+      return; 
+    }
+  	if (r.key > (*t)->reg.key){ 
+      remove_search_binari(&(*t)->right, r); 
+      // arq_b<<"O numero """<<r.key<<""" foi removido.\n"; 
+      return;
+    }
 
   	if ((*t)->right == NULL){ 
+      arq_b<<"O numero """<<r.key<<""" foi removido.\n"; 
   		aux = *t;  
   		*t = (*t)->left;
     	free(aux);
     	return;
   	}
 
-  	if ((*t)->left != NULL){ antecessor(&(*t)->left, *t); return; }
+  	if ((*t)->left != NULL){ 
+      arq_b<<"O numero """<<r.key<<""" foi removido.\n"; 
+      antecessor(&(*t)->left, *t); 
+      return; 
+    }
 
   	aux = *t;  
   	*t = (*t)->right;
