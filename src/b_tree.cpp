@@ -29,7 +29,7 @@ void insertTree_binari(Tree **t, Record r){
 
 }
  
-void remove_search_binari(Tree **t, Record r){
+void binari_remove(Tree **t, Record r){
 	Tree *aux;
   	if (*t == NULL){ 
   		arq_b<<"Numero não encontrado: "<<r.key<<endl;
@@ -37,13 +37,11 @@ void remove_search_binari(Tree **t, Record r){
   	}
 
   	if (r.key < (*t)->reg.key){ 
-      remove_search_binari(&(*t)->left, r); 
-      // arq_b<<"O numero """<<r.key<<""" foi removido.\n"; 
+      binari_remove(&(*t)->left, r);
       return; 
     }
   	if (r.key > (*t)->reg.key){ 
-      remove_search_binari(&(*t)->right, r); 
-      // arq_b<<"O numero """<<r.key<<""" foi removido.\n"; 
+      binari_remove(&(*t)->right, r); 
       return;
     }
 
@@ -65,29 +63,6 @@ void remove_search_binari(Tree **t, Record r){
   	*t = (*t)->right;
   	free(aux);
 }
-// void pesquisa_b(Tree **b, Tree **aux, Record r){
-//   // cout<<r.key<<endl;
-// 	if(*b == NULL){
-//     // cout<<r.key<<endl;
-// 		// printf("[ERROR]: Node not found!");
-// 		return;
-// 	}
-//   if((*b)->reg.key > r.key){ 
-//     pesquisa_b(&(*b)->left, aux, r); 
-//     removeTree_binari( b,r);
-//     // cout<<r.key<<endl;
-//     return;
-//   }
-// 	if((*b)->reg.key < r.key){ 
-//     pesquisa_b(&(*b)->right, aux, r);
-//     removeTree_binari(b, r);
-//     // cout<<r.key<<endl;
-//     return;
-//   }
-// 	*aux = *b;
-// }
-
-
 
 void widthPath(Tree *t){
   Fila q;
@@ -105,13 +80,12 @@ void widthPath(Tree *t){
     if(no.p->left != NULL){
       filho.p = no.p->left;
       Enfileira(&q, filho);
-      //printf(" Entrei leftuerda! ");
     }
 
     if(no.p->right != NULL){
       filho.p = no.p->right;
       Enfileira(&q, filho);
-      //printf(" Entrei direita! ");
+     
     }
 
   }

@@ -41,7 +41,7 @@ void insertTree_avl(Tree **t, Record r){
   (*t)->weight = getMaxWeight(getWeight(&(*t)->left), getWeight(&(*t)->right)) + 1;
 }
 
-int isInTree(Tree *t, Record r){ // diferente 
+int isInTree(Tree *t, Record r){ 
   
   if(t == NULL){ 
     return 0;
@@ -87,20 +87,18 @@ void rebalanceTree(Tree **t){
 
 }
 
-void remove_search_avl(Tree **t, Tree **f ,Record r){
+void avl_remove(Tree **t, Tree **f ,Record r){
 	Tree *aux1;
 	if (*t == NULL){ 
   		arq<<"Numero não encontrado: "<<r.key<<"\n";
     	return;
 	}	
   	if (r.key < (*t)->reg.key){ 
-		remove_search_avl(&(*t)->left, t, r);
-		// arq<<"O numero """<<r.key<<""" foi removido."; 
+		avl_remove(&(*t)->left, t, r); 
 		return;
 		}
   	if (r.key > (*t)->reg.key){ 
-		remove_search_avl(&(*t)->right, t, r);
-		// arq<<"O numero """<<r.key<<""" foi removido."; 
+		avl_remove(&(*t)->right, t, r); 
 		return;
 	}
 
@@ -128,28 +126,7 @@ void remove_search_avl(Tree **t, Tree **f ,Record r){
   	rebalanceTree(f); 	
   	
 }
-void pesquisa_avl(Tree **avl, Tree **aux, Record r){
-//   cout<<r.key<<endl;
-	if(*avl == NULL){
-    // cout<<r.key<<endl;
-		// printf("[ERROR]: Node not found!");
-		return;
-	}
-  if((*avl)->reg.key > r.key){ 
-    pesquisa_avl(&(*avl)->left, aux, r);
-	// cout<<r.key<<endl; 
-	// removeTree_avl(avl,avl);
-    return;
-  }
-	if((*avl)->reg.key < r.key){
-		pesquisa_avl(&(*avl)->right, aux, r);
-		// cout<<r.key<<endl;
-		// removeTree_avl(avl,avl);
-		// cout<<r.key<<endl; 
-		return;
-	}
-	*aux = *avl;
-}
+
 
 
 

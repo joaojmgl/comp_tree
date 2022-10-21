@@ -152,13 +152,6 @@ void rotacaoSimplesDireita_rb(Tree **raiz, Tree *child){
   x->pai = y;
   
 }
-
-// void remove_search_rb(Tree **raiz,Tree **sucessor,Record r){
-
-
-  
-// }
-
 void remove_rb(Tree **rb, Tree *r, Record t){
 Tree *aux = r;
 Tree *aux1;
@@ -237,18 +230,18 @@ void Transplante_rb(Tree **rb, Tree *r, Tree *prox){
   prox->pai=r->pai;
 }
 
-void remove_search_rb(Tree **rb,Tree **aux, Record r){
+void rb_remove(Tree **rb,Tree **aux, Record r){
   if (*aux == nullptr){ 
     arq_rb<<"Numero não encontrado: "<<r.key<<"\n";
     return;
   }
     
   if (r.key < (*aux)->reg.key){ 
-    remove_search_rb(rb, &(*aux)->left, r);
+    rb_remove(rb, &(*aux)->left, r);
     return; 
   }
-  if (r.key > (*aux)->reg.key){ 
-    remove_search_rb(rb, &(*aux)->right, r); 
+  if (r.key > (*aux)->reg.key){
+    rb_remove(rb, &(*aux)->right, r); 
     return; 
   }
 
@@ -257,8 +250,9 @@ void remove_search_rb(Tree **rb,Tree **aux, Record r){
     (*rb)=nullptr;
     return;
   } 
+  // cout<<"buguei\n";
   remove_rb(rb,(*aux),r);
-  
+  // cout<<"buguei\n";
 } 
 
 
@@ -339,4 +333,12 @@ void delete_fixup(Tree **rb, Tree *v){
     }
   }
   v->cor=true;  
+}
+
+void central_rb(Tree *t){
+  if(!(t == NULL)){
+    central(t->left); 
+    printf("%d - %s\t", t->reg.key, t->cor ? "black" : "red");
+    central(t->right); 
+  }
 }
